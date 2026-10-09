@@ -13,11 +13,6 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Create android folder
-        run: |
-          if [! -d "android" ]; then
-            flutter create. --project-name my_mart_app --org com.mymart --platforms android
-          fi
       - run: flutter pub get
       - run: flutter build appbundle --release
       - uses: actions/upload-artifact@v4
