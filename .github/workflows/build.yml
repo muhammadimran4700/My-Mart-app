@@ -1,22 +1,30 @@
 name: Build AAB
-on:
-  push:
-    branches: [ main ]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Create Android folder
-        run: flutter create . --platforms=android --project-name my_mart_app --org com.mymart
+      - name: Setup Flutter Project
+        run: |
+          if [! -f "pubspec.yaml" ]; then
+            flutter create. --project-name my_mart_app --org com.mymart.app --platforms android
+          else
+            echo "pubspec exists, keeping your My Mart code"
+          fi
+          flutter pub get
       - name: Build AAB
         run: flutter build appbundle --release
       - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
-          name: My-Mart-AAB
+          name: My-Mart-FINAL-AAB
           path: build/app/outputs/bundle/release/app-release.aab
