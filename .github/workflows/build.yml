@@ -13,18 +13,9 @@ jobs:
         with:
           flutter-version: '3.22.0'
           channel: 'stable'
-      - name: Setup Flutter Project
-        run: |
-          if [! -f "pubspec.yaml" ]; then
-            flutter create. --project-name my_mart_app --org com.mymart.app --platforms android
-          else
-            echo "pubspec exists, keeping your My Mart code"
-          fi
-          flutter pub get
-      - name: Build AAB
-        run: flutter build appbundle --release
-      - name: Upload AAB
-        uses: actions/upload-artifact@v4
+      - run: flutter pub get
+      - run: flutter build appbundle --release
+      - uses: actions/upload-artifact@v4
         with:
           name: My-Mart-FINAL-AAB
           path: build/app/outputs/bundle/release/app-release.aab
